@@ -1,0 +1,12 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+* {
+    transition: all 0.15s ease-in-out;
+}
+
+input:focus, button:focus {
+    --tw-ring-color: rgb(59 130 246 / 0.5); 
+}
+ 
