@@ -1,4 +1,5 @@
 <?php
+// register.php - The main registration page view
 
 require_once 'config.php';
 
@@ -27,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt_user->rowCount() > 0) {
             $message = '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">This username is already taken.</div>';
         } else {
-
             $sql_email = "SELECT email FROM users";
             $stmt_email = $pdo->prepare($sql_email);
             $stmt_email->execute();
@@ -44,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($email_exists) {
                 $message = '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">This email is already registered.</div>';
             } else {
-
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $encrypted_email = secure_encrypt($email, ENCRYPTION_KEY);
                 try {
@@ -73,79 +72,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - IBITS Learning Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-12">
+<body class="flex flex-col min-h-screen">
+    <div class="flex-grow flex items-center justify-center py-12">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-gray-800">Create a Student Account</h1>
+                <p class="mt-2 text-gray-600">Join the IBITS Learning Hub</p>
+            </div>
 
-    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
-        <div class="text-center">
-            <h1 class="text-3xl font-bold text-gray-800">Create a Student Account</h1>
-            <p class="mt-2 text-gray-600">Join the IBITS Learning Hub</p>
+            <?php echo $message; ?>
+
+            <form id="registerForm" action="register.php" method="post" class="space-y-4" novalidate>
+                <div>
+                    <label for="username" class="text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" name="username" id="username" required 
+                           class="mt-1 block w-full px-4 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" required
+                           class="mt-1 block w-full px-4 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative">
+                        <input type="password" name="password" id="password" required
+                               class="mt-1 block w-full px-4 py-2 pr-10 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
+                        <button type="button" onclick="togglePasswordVisibility('password', this)" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <p id="password-length-error" class="text-xs text-red-600 mt-1 hidden">Password must be at least 8 characters long.</p>
+                </div>
+                <div>
+                    <label for="confirm_password" class="text-sm font-medium text-gray-700">Confirm Password</label>
+                     <div class="relative">
+                        <input type="password" name="confirm_password" id="confirm_password" required
+                               class="mt-1 block w-full px-4 py-2 pr-10 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
+                        <button type="button" onclick="togglePasswordVisibility('confirm_password', this)" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <p id="password-match-error" class="text-xs text-red-600 mt-1 hidden">Passwords do not match.</p>
+                </div>
+                <div>
+                    <button type="submit" id="submitBtn" class="w-full flex justify-center items-center px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:bg-gray-400">
+                        <span class="btn-text">Register</span>
+                         <span class="spinner hidden"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                </div>
+            </form>
+            <p class="text-xs text-center text-gray-500">
+                Already have an account? <a href="index.php" class="text-blue-600 hover:underline">Log In</a>
+            </p>
         </div>
-
-        <?php echo $message; ?>
-
-        <form id="registerForm" action="register.php" method="post" class="space-y-4" novalidate>
-            <div>
-                <label for="username" class="text-sm font-medium text-gray-700">Username</label>
-                <input type="text" name="username" id="username" required 
-                       class="mt-1 block w-full px-4 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
-            </div>
-            <div>
-                <label for="email" class="text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" id="email" required
-                       class="mt-1 block w-full px-4 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
-            </div>
-            <div>
-                <label for="password" class="text-sm font-medium text-gray-700">Password</label>
-                <div class="relative">
-                    <input type="password" name="password" id="password" required
-                           class="mt-1 block w-full px-4 py-2 pr-10 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
-                     <button type="button" onclick="togglePasswordVisibility('password')" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700">
-                        <svg id="eye-icon-password" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg>
-                        <svg id="eye-slash-icon-password" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill hidden" viewBox="0 0 16 16"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/></svg>
-                    </button>
-                </div>
-                <p id="password-length-error" class="text-xs text-red-600 mt-1 hidden">Password must be at least 8 characters long.</p>
-            </div>
-            <div>
-                <label for="confirm_password" class="text-sm font-medium text-gray-700">Confirm Password</label>
-                 <div class="relative">
-                    <input type="password" name="confirm_password" id="confirm_password" required
-                           class="mt-1 block w-full px-4 py-2 pr-10 text-gray-900 bg-gray-50 border border-gray-300 rounded-md">
-                    <button type="button" onclick="togglePasswordVisibility('confirm_password')" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700">
-                        <svg id="eye-icon-confirm_password" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg>
-                        <svg id="eye-slash-icon-confirm_password" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill hidden" viewBox="0 0 16 16"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/></svg>
-                    </button>
-                </div>
-                <p id="password-match-error" class="text-xs text-red-600 mt-1 hidden">Passwords do not match.</p>
-            </div>
-            <div>
-                <button type="submit" id="submitBtn" class="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400">
-                    Register
-                </button>
-            </div>
-        </form>
-        <p class="text-xs text-center text-gray-500">
-            Already have an account? <a href="index.php" class="text-blue-600 hover:underline">Log In</a>
-        </p>
     </div>
 
-    <script>
-        function togglePasswordVisibility(fieldId) {
-            const passwordField = document.getElementById(fieldId);
-            const eyeIcon = document.getElementById('eye-icon-' + fieldId);
-            const eyeSlashIcon = document.getElementById('eye-slash-icon-' + fieldId);
+     <footer class="text-center text-sm text-white py-4 bg-black bg-opacity-25">
+        &copy; <?php echo date("Y"); ?> IBITS Learning Hub. All Rights Reserved.
+    </footer>
 
+    <script>
+        function togglePasswordVisibility(fieldId, button) {
+            const passwordField = document.getElementById(fieldId);
+            const icon = button.querySelector('i');
+            
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                eyeIcon.classList.add('hidden');
-                eyeSlashIcon.classList.remove('hidden');
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
             } else {
                 passwordField.type = 'password';
-                eyeIcon.classList.remove('hidden');
-                eyeSlashIcon.classList.add('hidden');
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
             }
         }
 
@@ -155,10 +158,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const passwordLengthError = document.getElementById('password-length-error');
         const passwordMatchError = document.getElementById('password-match-error');
         const submitBtn = document.getElementById('submitBtn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const spinner = submitBtn.querySelector('.spinner');
 
         function validatePasswords() {
             let isValid = true;
-
             if (password.value.length > 0 && password.value.length < 8) {
                 passwordLengthError.classList.remove('hidden');
                 password.classList.add('border-red-500');
@@ -167,7 +171,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 passwordLengthError.classList.add('hidden');
                 password.classList.remove('border-red-500');
             }
-
             if (confirmPassword.value.length > 0 && password.value !== confirmPassword.value) {
                 passwordMatchError.classList.remove('hidden');
                 confirmPassword.classList.add('border-red-500');
@@ -176,7 +179,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 passwordMatchError.classList.add('hidden');
                 confirmPassword.classList.remove('border-red-500');
             }
-            
             submitBtn.disabled = !isValid;
         }
 
@@ -186,7 +188,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         form.addEventListener('submit', function(event) {
             validatePasswords();
             if (submitBtn.disabled) {
-                event.preventDefault(); 
+                event.preventDefault();
+            } else if (form.checkValidity()) {
+                submitBtn.disabled = true;
+                btnText.classList.add('hidden');
+                spinner.classList.remove('hidden');
             }
         });
     </script>

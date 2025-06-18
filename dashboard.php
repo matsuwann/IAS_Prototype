@@ -23,7 +23,8 @@ $username = htmlspecialchars($_SESSION["username"]);
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100">
+
+<body class="flex flex-col min-h-screen">
 
     <nav class="bg-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +40,7 @@ $username = htmlspecialchars($_SESSION["username"]);
                     <div id="dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-10 hidden">
                         <div class="px-4 py-2 text-xs text-gray-400">My Account</div>
                         <a href="activity_log.php" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                           View Activity Log
+                            View Activity Log
                         </a>
                         <div class="border-t border-gray-100 my-1"></div>
                         <a href="logout.php" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
@@ -52,11 +53,13 @@ $username = htmlspecialchars($_SESSION["username"]);
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+
+    <main class="flex-grow max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 w-full">
         <div class="px-4 py-6 sm:px-0">
-            <div class="bg-white rounded-lg shadow-lg p-8">
+            
+            <div class="bg-white/90 backdrop-blur-sm border border-white/20 rounded-lg shadow-lg p-8">
                 <div class="mb-6">
-                     <h2 class="text-2xl font-bold text-gray-900">Your Dashboard</h2>
+                     <h2 class="text-2xl font-bold text-gray-800">Your Dashboard</h2>
                 </div>
                 
                 <?php if ($role == 'teacher'): ?>
@@ -79,6 +82,10 @@ $username = htmlspecialchars($_SESSION["username"]);
             </div>
         </div>
     </main>
+    
+    <footer class="text-center text-sm text-white py-4 bg-black bg-opacity-25">
+        &copy; <?php echo date("Y"); ?> IBITS Learning Hub. All Rights Reserved.
+    </footer>
 
     <script>
         const dropdownButton = document.getElementById('dropdown-button');
