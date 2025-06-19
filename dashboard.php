@@ -1,21 +1,23 @@
 <?php
-//dash
+//dashboard for IBITS Learning Hub
 require_once 'config.php';
 
+//session security check
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_SESSION["tfa_verified"]) || $_SESSION["tfa_verified"] !== true) {
     header("location: index.php");
     exit;
 }
-
+//logs dashboard access
 log_activity($pdo, $_SESSION['user_id'], $_SESSION['username'], "Viewed dashboard");
 
+//fetch user role and username
 $role = $_SESSION["role"];
 $username = htmlspecialchars($_SESSION["username"]);
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <!-- Dashboard page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - IBITS Learning Hub</title>
@@ -86,7 +88,7 @@ $username = htmlspecialchars($_SESSION["username"]);
     <footer class="text-center text-sm text-white py-4 bg-black bg-opacity-25">
         &copy; <?php echo date("Y"); ?> IBITS Learning Hub. All Rights Reserved.
     </footer>
-
+<!-- JS for dropdown -->
     <script>
         const dropdownButton = document.getElementById('dropdown-button');
         const dropdownMenu = document.getElementById('dropdown-menu');

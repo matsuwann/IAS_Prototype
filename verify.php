@@ -1,7 +1,8 @@
 <?php
-
+//verify checks for 2FA
 require_once 'config.php';
 
+//session security check
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || (isset($_SESSION["tfa_verified"]) && $_SESSION["tfa_verified"] === true)) {
     header("location: index.php");
     exit;
@@ -9,6 +10,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || (isset($_
 
 $error_message = '';
 
+//form sub
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $submitted_code = trim($_POST['tfa_code']);
     
@@ -34,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <!-- 2FA form -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Two-Factor Authentication</title>

@@ -1,10 +1,13 @@
 <?php
 
+//Contains database configurations
+
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'ias_prototype');
 
+//database connection
 try {
     $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -17,13 +20,13 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
+//constants
 define('MAX_LOGIN_ATTEMPTS', 5);
 define('LOCKOUT_PERIOD', '10 seconds'); 
 define('TFA_CODE_VALIDITY', 300); 
 
 
-
+//activity logger
 function log_activity($pdo, $userId, $usernameAttempt, $action) {
     $ip_address = $_SERVER['REMOTE_ADDR'];
     $user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -42,6 +45,7 @@ function log_activity($pdo, $userId, $usernameAttempt, $action) {
     }
 }
 
+//encrypt decrypt
 function secure_encrypt($data, $key) {
     $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
     $iv = openssl_random_pseudo_bytes($ivlen);

@@ -1,17 +1,21 @@
 <?php
 
+//activity log
 require_once 'config.php';
 
+//session security check
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_SESSION["tfa_verified"]) || $_SESSION["tfa_verified"] !== true) {
     header("location: index.php");
     exit;
 }
 
+//logs activity access
 log_activity($pdo, $_SESSION['user_id'], $_SESSION['username'], "Viewed activity log page");
 
 $username = htmlspecialchars($_SESSION["username"]);
 $role = $_SESSION["role"];
 
+// database query to fetch user activity logs
 $sql = "SELECT action, ip_address, user_agent, timestamp FROM user_activity WHERE user_id = :id OR username_attempt = :username ORDER BY timestamp DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':id', $_SESSION['user_id'], PDO::PARAM_INT);

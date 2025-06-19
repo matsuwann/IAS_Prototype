@@ -3,7 +3,7 @@
 
 require_once 'config.php';
 
-
+//security checks
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["tfa_verified"]) && $_SESSION["tfa_verified"] === true) {
     header("location: dashboard.php");
     exit;
@@ -13,10 +13,12 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && (!isset($_
     header("location: verify.php");
     exit;
 }
+
 ?>
+<!-- Login page for IBITS Learning Hub -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - IBITS Learning Hub</title>
