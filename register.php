@@ -1,5 +1,5 @@
 <?php
-// register.php - The main registration page view
+
 
 require_once 'config.php';
 

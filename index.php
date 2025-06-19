@@ -1,14 +1,14 @@
 <?php
-// index.php - The main login page view
+
 
 require_once 'config.php';
 
-// Redirect if user is already logged in
+
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && isset($_SESSION["tfa_verified"]) && $_SESSION["tfa_verified"] === true) {
     header("location: dashboard.php");
     exit;
 }
-// Redirect to 2FA page if they've passed password but not 2FA
+
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && (!isset($_SESSION["tfa_verified"]) || $_SESSION["tfa_verified"] === false)) {
     header("location: verify.php");
     exit;
